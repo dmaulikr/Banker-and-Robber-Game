@@ -7,21 +7,27 @@ public class gameScript : MonoBehaviour {
 	public GameObject square1;
 	public GameObject square2;
 	public GameObject square3;
+	public GameObject square4;
 	public GameObject coverer;
 
 	public Button OK;
 	public Button button1;
 	public Button button2;
 	public Button button3;
+	public Button button4;
 	public Text scoreText;
+	public Text turnText;
 
 	public string targetLayer = "aboveCoin";
 	public string mode = "banker";
 
 	public int bomberScore = 0;
+	public int turnsLeft = 10;
 	public bool house1 = false;
 	public bool house2 = false;
 	public bool house3 = false;
+	public bool house4 = false;
+
 
 	void Start () {
 		OK.onClick.AddListener (TaskOnClick);
@@ -62,6 +68,7 @@ public class gameScript : MonoBehaviour {
 			button1.interactable = true;
 			button2.interactable = true;
 			button3.interactable = true;
+			button4.interactable = true;
 
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = false;
@@ -69,12 +76,16 @@ public class gameScript : MonoBehaviour {
 				
 		} else {
 			mode = "banker";
+			turnsLeft -= 1;
+
+
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = true;
 			}
 			button1.interactable = false;
 			button2.interactable = false;
 			button3.interactable = false;
+			button4.interactable = false;
 
 			Bounds bound1 = square1.GetComponent<Renderer>().bounds;
 			Bounds bound2 = square2.GetComponent<Renderer>().bounds;
@@ -94,7 +105,7 @@ public class gameScript : MonoBehaviour {
 						Debug.Log ("Coin Destroyed");
 						bomberScore += 0;
 						Destroy (bomb);
-						scoreText.text = "Robber exploded! Banker Wins!";
+						scoreText.text = "Robber hit the bomb! Add 2 turns!";
 					}
 				}
 
@@ -191,6 +202,15 @@ public class gameScript : MonoBehaviour {
 		if (mode == "bomber"){
 			square3.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 			house3 = true;
+			button2.interactable = false;
+			button1.interactable = false;
+		}
+	}
+
+	void RevealHouse4 (){
+		if (mode == "bomber"){
+			square4.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
+			house4 = true;
 			button2.interactable = false;
 			button1.interactable = false;
 		}
