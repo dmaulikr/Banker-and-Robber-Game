@@ -8,7 +8,6 @@ public class gameScript : MonoBehaviour {
 	public GameObject square2;
 	public GameObject square3;
 	public GameObject coverer;
-	public GameObject houseAndCoverer;
 
 	public Button OK;
 	public Button button1;
@@ -33,14 +32,12 @@ public class gameScript : MonoBehaviour {
 
 
 	void TaskOnClick () {
-	//	houseAndCoverer.GetComponentsInChildren<GameObject>().GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
-		square1.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
-		square2.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
-		square3.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
-		coverer.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
+		foreach (GameObject square in GameObject.FindGameObjectsWithTag("houseAndCoverer")) {
+			square.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
+		}
+
 		ToggleLayer ();
 		ToggleMode ();
-
 
 	}
 
