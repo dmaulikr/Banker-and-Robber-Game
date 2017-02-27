@@ -48,7 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\bombScript.cs" />
      <Compile Include="Assets\Scripts\coinScript.cs" />
-     <Compile Include="Assets\Scripts\cubescript.cs" />
+     <Compile Include="Assets\Scripts\cubeScript.cs" />
      <Compile Include="Assets\Scripts\gameScript.cs" />
      <Compile Include="Assets\Scripts\selectScript.cs" />
  <Reference Include="UnityEngine.UI">

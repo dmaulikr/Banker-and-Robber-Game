@@ -79,7 +79,7 @@
 -define:UNITY_TEAM_LICENSE
 'Assets/Scripts/bombScript.cs'
 'Assets/Scripts/coinScript.cs'
-'Assets/Scripts/cubescript.cs'
+'Assets/Scripts/cubeScript.cs'
 'Assets/Scripts/gameScript.cs'
 'Assets/Scripts/selectScript.cs'
 -r:'/Applications/Unity/Unity.app/Contents/MonoBleedingEdge/lib/mono/unity/System.Runtime.Serialization.dll'
