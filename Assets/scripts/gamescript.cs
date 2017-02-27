@@ -13,6 +13,7 @@ public class gameScript : MonoBehaviour {
 	public Button button1;
 	public Button button2;
 	public Button button3;
+	public Text scoreText;
 
 	public string targetLayer = "aboveCoin";
 	public string mode = "banker";
@@ -58,7 +59,7 @@ public class gameScript : MonoBehaviour {
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "bomber";
-			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coinsAndBombs")) {
+			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = false;
 			}
 
@@ -67,7 +68,7 @@ public class gameScript : MonoBehaviour {
 //			square3.GetComponentInChildren<SpriteRenderer> ().color = new Color(225f,225f,225f);
 		} else {
 			mode = "banker";
-			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coinsAndBombs")) {
+			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = true;
 			}
 
@@ -76,37 +77,67 @@ public class gameScript : MonoBehaviour {
 			Bounds bound3 = square3.GetComponent<Renderer>().bounds;
 
 			if (house1 == true) {
-					foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coinsAndBombs")) {
+					foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 						if (bound1.Intersects (coin.GetComponent<Renderer>().bounds)) {
 							Debug.Log ("Coin Destroyed");
 							bomberScore += 10;
 							Destroy (coin);
+						scoreText.text = "Bomber's Score:" + bomberScore;
 						}
 					}
+				foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+					if (bound1.Intersects (bomb.GetComponent<Renderer>().bounds)) {
+						Debug.Log ("Coin Destroyed");
+						bomberScore += 0;
+						Destroy (bomb);
+						scoreText.text = "Robber exploded! Banker Wins!";
+					}
+				}
 
 			}
 
 		
 
 			if (house2 == true) {
-				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coinsAndBombs")) {
+				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 					if (bound2.Intersects (coin.GetComponent<Renderer>().bounds)) {
 						Debug.Log ("Coin Destroyed");
 						bomberScore += 10;
 						Destroy (coin);
+						scoreText.text = "Bomber's Score:" + bomberScore;
 					}
 				}
+				foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+					if (bound2.Intersects (bomb.GetComponent<Renderer>().bounds)) {
+						Debug.Log ("Coin Destroyed");
+						bomberScore += 0;
+						Destroy (bomb);
+						scoreText.text = "Robber exploded! Banker Wins!";
+					}
+				}
+
+
 
 			}
 
 			if (house3 == true) {
-				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coinsAndBombs")) {
+				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 					if (bound3.Intersects (coin.GetComponent<Renderer>().bounds)) {
 						Debug.Log ("Coin Destroyed");
 						bomberScore += 10;
 						Destroy (coin);
+						scoreText.text = "Bomber's Score:" + bomberScore;
 					}
 				}
+				foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+					if (bound3.Intersects (bomb.GetComponent<Renderer>().bounds)) {
+						Debug.Log ("Coin Destroyed");
+						bomberScore += 0;
+						Destroy (bomb);
+						scoreText.text = "Robber exploded! Banker Wins!";
+					}
+				}
+
 
 			}
 
