@@ -59,18 +59,22 @@ public class gameScript : MonoBehaviour {
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "bomber";
+			button1.interactable = true;
+			button2.interactable = true;
+			button3.interactable = true;
+
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = false;
 			}
-
-//			square1.GetComponentInChildren<SpriteRenderer> ().color = new Color(225f,225f,225f);
-//			square2.GetComponentInChildren<SpriteRenderer> ().color = new Color(225f,225f,225f);
-//			square3.GetComponentInChildren<SpriteRenderer> ().color = new Color(225f,225f,225f);
+				
 		} else {
 			mode = "banker";
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript>().enabled = true;
 			}
+			button1.interactable = false;
+			button2.interactable = false;
+			button3.interactable = false;
 
 			Bounds bound1 = square1.GetComponent<Renderer>().bounds;
 			Bounds bound2 = square2.GetComponent<Renderer>().bounds;
@@ -168,6 +172,8 @@ public class gameScript : MonoBehaviour {
 		if (mode == "bomber"){
 			square1.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 			house1 = true;
+			button2.interactable = false;
+			button3.interactable = false;
 
 		}
 	}
@@ -176,6 +182,8 @@ public class gameScript : MonoBehaviour {
 		if (mode == "bomber"){
 			square2.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 			house2 = true;
+			button1.interactable = false;
+			button3.interactable = false;
 		}
 	}
 
@@ -183,6 +191,8 @@ public class gameScript : MonoBehaviour {
 		if (mode == "bomber"){
 			square3.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 			house3 = true;
+			button2.interactable = false;
+			button1.interactable = false;
 		}
 	}
 
