@@ -36,9 +36,12 @@ public class gameScript : MonoBehaviour {
 
  
 
-	public int robberScore = 0;
-	public int bankerScore = 0;
+	public static int robberScore = 0;
+	public static int bankerScore = 0;
 	public int turnsLeft = 10;
+	public static int bankerSaveLeft = 2;
+	public int destroyedNumber = 0;
+	public int bombScore=0;
 
 	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
 	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types. 
@@ -51,21 +54,28 @@ public class gameScript : MonoBehaviour {
 	}
 
 	void Update() {
-		
+		//Calculate banker score
+		bankerScore = 0;
+		foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
+			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")){
+				if (house.GetComponent<Renderer> ().bounds.Intersects (coin.GetComponent<Renderer> ().bounds)) {
+					bankerScore += 1;
+				}
+			}
+		}
 
 	}
 
 
 	// Move the warehouses to the front/back when OK button is clicked, and the two toggles implements other game mode features.
 	void TaskOnClick () {
-		foreach (GameObject square in GameObject.FindGameObjectsWithTag("houseAndCoverer")) {
+		foreach (GameObject square in GameObject.FindGameObjectsWithTag("houses")) {
 			square.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 		}
 
+		GameObject.FindGameObjectWithTag("coverer").GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 		ToggleLayer ();
 		ToggleMode ();
-
-
 
 	}
 
@@ -81,6 +91,8 @@ public class gameScript : MonoBehaviour {
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "robber";
+
+			destroyedNumber = 0;
 			// This is the text on the top of screen.
 			ScoreText.text = "You are the robber. You have robbed " + robberScore + "coins of that banker! Haha!";
 
@@ -110,23 +122,31 @@ public class gameScript : MonoBehaviour {
 		} else {
 
 			mode = "banker";
+
+			BombHouse ();
 			//This updates the turns left everytime it changes to the banker.
 			turnsLeft -= 1;
 			turnText.text = turnsLeft + " Nights Left";
-
-			// This is the text on the top of screen.
-			ScoreText.text = "You are the banker. You now have " + bankerScore + " coins!";
-
-			// This is the text on the right side of screen. called Note
-			note.text = "To Audrey: Whatever note you want to give the banker. You can put it here";
 
 			// Whatever discovered by the robber are destroyed so that the banker can nolonger see it.
 			foreach (GameObject destroyed in toBeDestroyed) {
 				Destroy (destroyed);
 			}
-
 			// Empty the destroy list can count again next time. 
 			toBeDestroyed.Clear ();
+
+
+			int score = bankerScore - destroyedNumber + bombScore;
+
+			// This is the text on the top of screen.
+			ScoreText.text = "You are the banker. You now have " + score + " coins!";
+
+			// This is the text on the right side of screen. called Note
+			note.text = "To Audrey: Whatever note you want to give the banker. You can put it here";
+
+
+
+
 
 			// I will change this later, so that banker cannot move around old coins.
 			//[NOT IMPLEMENTED FUNCTION HERE]
@@ -227,6 +247,7 @@ public class gameScript : MonoBehaviour {
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				if (bound.Intersects (coin.GetComponent<Renderer> ().bounds)) {
 					robberScore += 1;
+				destroyedNumber += 1;
 					toBeDestroyed.Add(coin);
 				ScoreText.text = "Good shot! You now have " + robberScore + " coins!";
 				}
@@ -234,16 +255,49 @@ public class gameScript : MonoBehaviour {
 
 			foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
 				if (bound.Intersects (bomb.GetComponent<Renderer>().bounds)) {
-					Debug.Log ("Coin Destroyed");
-					robberScore += 0;
+				bombScore += 2;
+
 					toBeDestroyed.Add(bomb);
-					ScoreText.text = "Oh no! You hit the bomb! Banker gets 2 coins!";
+					
+					ScoreText.text = "Oh no! You hit the bomb! Banker gets 2 coins! The house is ruined!";
 				}
 			}
 
 
 		}
+	void BombHouse(){
+		foreach(GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")){
+			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare1.GetComponent<Renderer>().bounds)){
+				cashOutSquare1.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
+				killed.Add (button1);
+				button1.interactable = false;
+
+			}
+			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare2.GetComponent<Renderer>().bounds)){
+				cashOutSquare2.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
+				killed.Add (button2);
+				button2.interactable = false;
+
+			}
+			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare3.GetComponent<Renderer>().bounds)){
+				cashOutSquare3.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
+				killed.Add (button3);
+				button3.interactable = false;
+
+			}
+			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare4.GetComponent<Renderer>().bounds)){
+				cashOutSquare4.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
+				killed.Add (button4);
+				button4.interactable = false;
+
+			}
+
+
+
+			}
+		}
 	}
+	
 
 
 
