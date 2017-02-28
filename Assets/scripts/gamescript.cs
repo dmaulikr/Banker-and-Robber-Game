@@ -34,13 +34,14 @@ public class gameScript : MonoBehaviour {
 	public string targetLayer = "aboveCoin";
 	public string mode = "banker";
 
-	//house1-4 shows whether the robber has revealed certain warehouse. 
+ 
 
 	public int robberScore = 0;
 	public int bankerScore = 0;
 	public int turnsLeft = 10;
 
-
+	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
+	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types. 
 	void Start () {
 		OK.onClick.AddListener (TaskOnClick);
 		button1.onClick.AddListener (PlayerButtonClicked1);
@@ -55,8 +56,7 @@ public class gameScript : MonoBehaviour {
 	}
 
 
-
-
+	// Move the warehouses to the front/back when OK button is clicked, and the two toggles implements other game mode features.
 	void TaskOnClick () {
 		foreach (GameObject square in GameObject.FindGameObjectsWithTag("houseAndCoverer")) {
 			square.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
@@ -77,48 +77,65 @@ public class gameScript : MonoBehaviour {
 		}
 	}
 
-
+	// Almost everything when you change mode, details explained in specific codes.
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "robber";
+			// This is the text on the top of screen.
 			ScoreText.text = "You are the robber. You have robbed " + robberScore + "coins of that banker! Haha!";
 
-			button1.GetComponentInChildren<Text>().text = "Reveal";
-			button2.GetComponentInChildren<Text>().text = "Reveal";
-			button3.GetComponentInChildren<Text>().text = "Reveal";
-			button4.GetComponentInChildren<Text>().text = "Reveal";
+			// This is the text on the right side of screen. called Note
+			note.text = "To Audrey: Whatever note you want to give the robber.";
+
+			// Activate all the buttons and change the button text
+			button1.GetComponentInChildren<Text> ().text = "Reveal";
+			button2.GetComponentInChildren<Text> ().text = "Reveal";
+			button3.GetComponentInChildren<Text> ().text = "Reveal";
+			button4.GetComponentInChildren<Text> ().text = "Reveal";
 			button1.interactable = true;
 			button2.interactable = true;
 			button3.interactable = true;
 			button4.interactable = true;
 
+			// Deactivate the button of warehouses that are cashed out.
 			foreach (Button btn in killed) {
 				btn.interactable = false;
 			}
 
+			// Robber cannot move coins.
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript> ().enabled = false;
 			}
 				
 		} else {
+
 			mode = "banker";
+			//This updates the turns left everytime it changes to the banker.
 			turnsLeft -= 1;
 			turnText.text = turnsLeft + " Nights Left";
+
+			// This is the text on the top of screen.
 			ScoreText.text = "You are the banker. You now have " + bankerScore + " coins!";
+
+			// This is the text on the right side of screen. called Note
+			note.text = "To Audrey: Whatever note you want to give the banker. You can put it here";
+
+			// Whatever discovered by the robber are destroyed so that the banker can nolonger see it.
 			foreach (GameObject destroyed in toBeDestroyed) {
 				Destroy (destroyed);
 			}
+
+			// Empty the destroy list can count again next time. 
 			toBeDestroyed.Clear ();
 
+			// I will change this later, so that banker cannot move around old coins.
+			//[NOT IMPLEMENTED FUNCTION HERE]
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 				coin.GetComponent<selectScript> ().enabled = true;
 			}
+				
 
-			foreach (Button btn in killed) {
-				btn.interactable = false;
-			}
-
-
+			// Update the buttons.
 			button1.GetComponentInChildren<Text>().text = "Cash Out";
 			button2.GetComponentInChildren<Text>().text = "Cash Out";
 			button3.GetComponentInChildren<Text>().text = "Cash Out";
@@ -127,13 +144,16 @@ public class gameScript : MonoBehaviour {
 			button2.interactable = true;
 			button3.interactable = true;
 			button4.interactable = true;
+			foreach (Button btn in killed) {
+				btn.interactable = false;
+			}
 
 		}
 	}
 
 	void PlayerButtonClicked1 (){
 		if (mode == "robber") {
-			
+			// reveal coin/bomb
 			square1.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
 			selected = square1;
 			button2.interactable = false;
@@ -142,6 +162,7 @@ public class gameScript : MonoBehaviour {
 			CalculateScore ();
 
 		} else {
+			// cash out function here
 			cashOutSquare1.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 			killed.Add (button1);
 			button1.interactable = false;
@@ -199,7 +220,7 @@ public class gameScript : MonoBehaviour {
 
 		}
 	}
-
+		// Update the robber score.
 		void CalculateScore(){
 			Bounds bound = selected.GetComponent<Renderer>().bounds;
 
@@ -222,7 +243,7 @@ public class gameScript : MonoBehaviour {
 
 
 		}
-		}
+	}
 
 
 
