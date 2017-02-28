@@ -81,6 +81,7 @@ public class gameScript : MonoBehaviour {
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "robber";
+			ScoreText.text = "You are the robber. You have robbed " + robberScore + "coins of that banker! Haha!";
 
 			button1.GetComponentInChildren<Text>().text = "Reveal";
 			button2.GetComponentInChildren<Text>().text = "Reveal";
@@ -103,6 +104,7 @@ public class gameScript : MonoBehaviour {
 			mode = "banker";
 			turnsLeft -= 1;
 			turnText.text = turnsLeft + " Nights Left";
+			ScoreText.text = "You are the banker. You now have " + bankerScore + " coins!";
 			foreach (GameObject destroyed in toBeDestroyed) {
 				Destroy (destroyed);
 			}
@@ -131,6 +133,7 @@ public class gameScript : MonoBehaviour {
 
 	void PlayerButtonClicked1 (){
 		if (mode == "robber") {
+			
 			square1.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
 			selected = square1;
 			button2.interactable = false;
@@ -204,7 +207,7 @@ public class gameScript : MonoBehaviour {
 				if (bound.Intersects (coin.GetComponent<Renderer> ().bounds)) {
 					robberScore += 1;
 					toBeDestroyed.Add(coin);
-					ScoreText.text = "You are the robber. You have " + robberScore + " Coins!";
+				ScoreText.text = "Good shot! You now have " + robberScore + " coins!";
 				}
 			}
 
@@ -213,7 +216,7 @@ public class gameScript : MonoBehaviour {
 					Debug.Log ("Coin Destroyed");
 					robberScore += 0;
 					toBeDestroyed.Add(bomb);
-					ScoreText.text = "You hit the bomb! Banker gets 2 coins!";
+					ScoreText.text = "Oh no! You hit the bomb! Banker gets 2 coins!";
 				}
 			}
 
