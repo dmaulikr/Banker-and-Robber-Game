@@ -39,9 +39,10 @@ public class gameScript : MonoBehaviour {
 	public static int robberScore = 0;
 	public static int bankerScore = 0;
 	public int turnsLeft = 10;
-	public static int bankerSaveLeft = 2;
+	public static int bankerInitialScore = 0;
 	public int destroyedNumber = 0;
-	public int bombScore=0;
+	public int bombScore = 0;
+	public int bombStored = 0;
 
 	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
 	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types. 
@@ -55,12 +56,31 @@ public class gameScript : MonoBehaviour {
 
 	void Update() {
 		//Calculate banker score
+		if (mode == "banker") {
 		bankerScore = 0;
 		foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
 			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")){
 				if (house.GetComponent<Renderer> ().bounds.Intersects (coin.GetComponent<Renderer> ().bounds)) {
 					bankerScore += 1;
 				}
+			}
+		}
+		bombStored = 0;
+		foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
+			foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+				if (house.GetComponent<Renderer> ().bounds.Intersects (bomb.GetComponent<Renderer> ().bounds)) {
+					bombStored += 1;
+				}
+			}
+		}
+
+
+			if (bankerScore + bombStored - bankerInitialScore > 0) {
+				ScoreText.text = "You can store " + (2 - bankerScore + bankerInitialScore - bombStored) + " more items!";
+			}
+			if (bankerScore + bombStored - bankerInitialScore == 2) {
+				ScoreText.text = "You can store no more items!";
+			//	foreach(GameObject coin in )
 			}
 		}
 
@@ -122,6 +142,8 @@ public class gameScript : MonoBehaviour {
 		} else {
 
 			mode = "banker";
+
+			bankerInitialScore = bankerScore;
 
 			BombHouse ();
 			//This updates the turns left everytime it changes to the banker.
