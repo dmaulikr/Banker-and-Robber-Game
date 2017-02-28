@@ -36,10 +36,10 @@ public class gameScript : MonoBehaviour {
 
  
 
-	public static int robberScore = 0;
-	public static int bankerScore = 0;
+	public int robberScore = 0;
+	public int bankerScore = 0;
 	public int turnsLeft = 10;
-	public static int bankerInitialScore = 0;
+	public int bankerInitialScore = 0;
 	public int destroyedNumber = 0;
 	public int bombScore = 0;
 	public int bombStored = 0;
