@@ -14,6 +14,9 @@ public class gameScript : MonoBehaviour {
 	public List<GameObject> toBeDestroyed;
 	public List<Button> killed;
 
+	public Button startScreen;
+	public Button endScreen;
+
 	public GameObject cashOutSquare1;
 	public GameObject cashOutSquare2;
 	public GameObject cashOutSquare3;
@@ -47,13 +50,16 @@ public class gameScript : MonoBehaviour {
 	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
 	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types. 
 	void Start () {
+		startScreen.onClick.AddListener (StartGame);
+		endScreen.gameObject.SetActive (false);
 		OK.onClick.AddListener (TaskOnClick);
 		button1.onClick.AddListener (PlayerButtonClicked1);
 		button2.onClick.AddListener (PlayerButtonClicked2);
 		button3.onClick.AddListener (PlayerButtonClicked3);
 		button4.onClick.AddListener (PlayerButtonClicked4);
 		note.text = "You are the banker. Store 2 coins or 1 coin and 1 bomb to begin.";
-		OK.interactable = false;
+		OK.interactable = false;	
+	
 	}
 
 	void Update() {
@@ -87,8 +93,15 @@ public class gameScript : MonoBehaviour {
 			}
 		}
 
+		if (turnsLeft == 0) {
+			endScreen.gameObject.SetActive (true);
+		}
+
 	}
 
+	void StartGame () {
+		startScreen.gameObject.SetActive (false);
+	}
 
 	// Move the warehouses to the front/back when OK button is clicked, and the two toggles implements other game mode features.
 	void TaskOnClick () {
