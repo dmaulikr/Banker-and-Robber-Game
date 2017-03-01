@@ -38,10 +38,10 @@ public class gameScript : MonoBehaviour
 	public string targetLayer = "aboveCoin";
 	public string mode = "banker";
 
-
+ 
 	public int prevNumItems = 0;
-	public int itemsLeft = 2;
 	public int numItems = 0;
+	public int itemsLeft = 2;
 	public int robberScore = 0;
 	public int bankerScore = 0;
 	public int turnsLeft = 10;
@@ -72,16 +72,16 @@ public class gameScript : MonoBehaviour
 	{
 		//Calculate banker score
 		if (mode == "banker") {
-			
+			bankerScore = 0;
 			numItems = 0;
 			foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
 				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
 					if (house.GetComponent<Renderer> ().bounds.Intersects (coin.GetComponent<Renderer> ().bounds)) {
+						bankerScore += 1;
 						numItems += 1;
 					}
 				}
 			}
-
 			bombStored = 0;
 			foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
 				foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
@@ -91,7 +91,8 @@ public class gameScript : MonoBehaviour
 					}
 				}
 			}
-				
+
+
 			if (numItems - prevNumItems > 0) {
 				itemsLeft -= 1;
 				if (itemsLeft <= 0) {
@@ -103,11 +104,11 @@ public class gameScript : MonoBehaviour
 			}
 
 		}
+		prevNumItems = numItems;
 
 		if (turnsLeft == 0) {
 			endScreen.gameObject.SetActive (true);
 		}
-		prevNumItems = numItems;
 
 
 	}
@@ -145,6 +146,8 @@ public class gameScript : MonoBehaviour
 		if (mode == "banker") {
 			mode = "robber";
 			itemsLeft = 2;
+			OK.interactable = false;
+
 			destroyedNumber = 0;
 			// This is the text on the top of screen.
 			ScoreText.text = "You are the robber. You have stolen " + robberScore + " coin(s).";
@@ -236,6 +239,7 @@ public class gameScript : MonoBehaviour
 			button2.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 
 		} else {
@@ -255,6 +259,7 @@ public class gameScript : MonoBehaviour
 			button1.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 		} else {
 			cashOutSquare2.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
@@ -274,6 +279,7 @@ public class gameScript : MonoBehaviour
 			button2.interactable = false;
 			button1.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 		} else {
 			cashOutSquare3.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
@@ -291,6 +297,7 @@ public class gameScript : MonoBehaviour
 			button2.interactable = false;
 			button1.interactable = false;
 			button3.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 
 		} else {
