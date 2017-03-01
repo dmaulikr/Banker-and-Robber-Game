@@ -46,11 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\bombScript.cs" />
-     <Compile Include="Assets\scripts\coinScript.cs" />
-     <Compile Include="Assets\scripts\cubescript.cs" />
-     <Compile Include="Assets\scripts\gameScript.cs" />
-     <Compile Include="Assets\scripts\selectScript.cs" />
+     <Compile Include="Assets\Scripts\bombScript.cs" />
+     <Compile Include="Assets\Scripts\coinScript.cs" />
+     <Compile Include="Assets\Scripts\cubescript.cs" />
+     <Compile Include="Assets\Scripts\gameScript.cs" />
+     <Compile Include="Assets\Scripts\selectScript.cs" />
  <Reference Include="UnityEngine.Analytics">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>

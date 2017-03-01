@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class gameScript : MonoBehaviour {
+public class gameScript : MonoBehaviour
+{
 	public GameObject square1;
 	public GameObject square2;
 	public GameObject square3;
@@ -37,8 +38,10 @@ public class gameScript : MonoBehaviour {
 	public string targetLayer = "aboveCoin";
 	public string mode = "banker";
 
- 
 
+	public int prevNumItems = 0;
+	public int itemsLeft = 2;
+	public int numItems = 0;
 	public int robberScore = 0;
 	public int bankerScore = 0;
 	public int turnsLeft = 10;
@@ -48,8 +51,9 @@ public class gameScript : MonoBehaviour {
 	public int bombStored = 0;
 
 	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
-	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types. 
-	void Start () {
+	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types.
+	void Start ()
+	{
 		startScreen.onClick.AddListener (StartGame);
 		endScreen.gameObject.SetActive (false);
 		OK.onClick.AddListener (TaskOnClick);
@@ -62,60 +66,69 @@ public class gameScript : MonoBehaviour {
 	
 	}
 
-	void Update() {
+	void Update ()
+	{
 		//Calculate banker score
 		if (mode == "banker") {
-		bankerScore = 0;
-		foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
-			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")){
-				if (house.GetComponent<Renderer> ().bounds.Intersects (coin.GetComponent<Renderer> ().bounds)) {
-					bankerScore += 1;
+			
+			numItems = 0;
+			foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
+				foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
+					if (house.GetComponent<Renderer> ().bounds.Intersects (coin.GetComponent<Renderer> ().bounds)) {
+						numItems += 1;
+					}
 				}
 			}
-		}
-		bombStored = 0;
-		foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
-			foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
-				if (house.GetComponent<Renderer> ().bounds.Intersects (bomb.GetComponent<Renderer> ().bounds)) {
-					bombStored += 1;
+
+			bombStored = 0;
+			foreach (GameObject house in GameObject.FindGameObjectsWithTag("houses")) {
+				foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+					if (house.GetComponent<Renderer> ().bounds.Intersects (bomb.GetComponent<Renderer> ().bounds)) {
+						bombStored += 1;
+						numItems += 1;
+					}
 				}
 			}
-		}
-
-
-			if (bankerScore + bombStored - bankerInitialScore > 0) {
-				ScoreText.text = "You can store " + (2 - bankerScore + bankerInitialScore - bombStored) + " more items!";
+				
+			if (numItems - prevNumItems > 0) {
+				itemsLeft -= 1;
+				if (itemsLeft <= 0) {
+					note.text = "You can store no more items!";
+					OK.interactable = true;
+				} else {
+					note.text = "You can store " + itemsLeft + " more items!";
+				}
 			}
-			if (bankerScore + bombStored - bankerInitialScore == 2) {
-				ScoreText.text = "You can store no more items!";
-				OK.interactable = true;
-			//	foreach(GameObject coin in )
-			}
+
 		}
 
 		if (turnsLeft == 0) {
 			endScreen.gameObject.SetActive (true);
 		}
+		prevNumItems = numItems;
 
 	}
 
-	void StartGame () {
+	void StartGame ()
+	{
 		startScreen.gameObject.SetActive (false);
 	}
 
 	// Move the warehouses to the front/back when OK button is clicked, and the two toggles implements other game mode features.
-	void TaskOnClick () {
+	void TaskOnClick ()
+	{
 		foreach (GameObject square in GameObject.FindGameObjectsWithTag("houses")) {
 			square.GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 		}
 
-		GameObject.FindGameObjectWithTag("coverer").GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
+		GameObject.FindGameObjectWithTag ("coverer").GetComponent<SpriteRenderer> ().sortingLayerName = targetLayer;
 		ToggleLayer ();
 		ToggleMode ();
 
 	}
 
-	void ToggleLayer(){
+	void ToggleLayer ()
+	{
 		if (targetLayer == "aboveCoin") {
 			targetLayer = "belowCoin";
 		} else {
@@ -124,11 +137,11 @@ public class gameScript : MonoBehaviour {
 	}
 
 	// Almost everything when you change mode, details explained in specific codes.
-	void ToggleMode() {
+	void ToggleMode ()
+	{
 		if (mode == "banker") {
 			mode = "robber";
-			OK.interactable = false;
-
+			itemsLeft = 2;
 			destroyedNumber = 0;
 			// This is the text on the top of screen.
 			ScoreText.text = "You are the robber. You have stolen " + robberScore + " coin(s).";
@@ -196,10 +209,10 @@ public class gameScript : MonoBehaviour {
 				
 
 			// Update the buttons.
-			button1.GetComponentInChildren<Text>().text = "Cash Out";
-			button2.GetComponentInChildren<Text>().text = "Cash Out";
-			button3.GetComponentInChildren<Text>().text = "Cash Out";
-			button4.GetComponentInChildren<Text>().text = "Cash Out";
+			button1.GetComponentInChildren<Text> ().text = "Cash Out";
+			button2.GetComponentInChildren<Text> ().text = "Cash Out";
+			button3.GetComponentInChildren<Text> ().text = "Cash Out";
+			button4.GetComponentInChildren<Text> ().text = "Cash Out";
 			button1.interactable = true;
 			button2.interactable = true;
 			button3.interactable = true;
@@ -211,7 +224,8 @@ public class gameScript : MonoBehaviour {
 		}
 	}
 
-	void PlayerButtonClicked1 (){
+	void PlayerButtonClicked1 ()
+	{
 		if (mode == "robber") {
 			// reveal coin/bomb
 			square1.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
@@ -219,7 +233,6 @@ public class gameScript : MonoBehaviour {
 			button2.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
-			OK.interactable = true;
 			CalculateScore ();
 
 		} else {
@@ -231,16 +244,16 @@ public class gameScript : MonoBehaviour {
 		}
 	}
 
-	void PlayerButtonClicked2 (){
-		if (mode == "robber"){
+	void PlayerButtonClicked2 ()
+	{
+		if (mode == "robber") {
 			square2.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
 			selected = square2;
 			button1.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
-			OK.interactable = true;
 			CalculateScore ();
-		}else {
+		} else {
 			cashOutSquare2.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 			killed.Add (button2);
 			button2.interactable = false;
@@ -250,16 +263,16 @@ public class gameScript : MonoBehaviour {
 		}
 	}
 
-	void PlayerButtonClicked3 (){
-		if (mode == "robber"){
+	void PlayerButtonClicked3 ()
+	{
+		if (mode == "robber") {
 			square3.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
 			selected = square3;
 			button2.interactable = false;
 			button1.interactable = false;
 			button4.interactable = false;
-			OK.interactable = true;
 			CalculateScore ();
-		}else {
+		} else {
 			cashOutSquare3.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 			killed.Add (button3);
 			button3.interactable = false;
@@ -267,69 +280,72 @@ public class gameScript : MonoBehaviour {
 		}
 	}
 
-	void PlayerButtonClicked4 (){
-		if (mode == "robber"){
+	void PlayerButtonClicked4 ()
+	{
+		if (mode == "robber") {
 			square4.GetComponent<SpriteRenderer> ().sortingLayerName = "belowCoin";
 			selected = square4;
 			button2.interactable = false;
 			button1.interactable = false;
 			button3.interactable = false;
-			OK.interactable = true;
 			CalculateScore ();
 
-		}else {
+		} else {
 			cashOutSquare4.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 			killed.Add (button4);
 			button4.interactable = false;
 
 		}
 	}
-		// Update the robber score.
-		void CalculateScore(){
-			Bounds bound = selected.GetComponent<Renderer>().bounds;
+	// Update the robber score.
+	void CalculateScore ()
+	{
+		Bounds bound = selected.GetComponent<Renderer> ().bounds;
 
-			foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
-				if (bound.Intersects (coin.GetComponent<Renderer> ().bounds)) {
-					robberScore += 1;
+		foreach (GameObject coin in GameObject.FindGameObjectsWithTag("coins")) {
+			if (bound.Intersects (coin.GetComponent<Renderer> ().bounds)) {
+				robberScore += 1;
 				destroyedNumber += 1;
-					toBeDestroyed.Add(coin);
+				toBeDestroyed.Add (coin);
 				ScoreText.text = "Good guess! You now have " + robberScore + " coin(s)!";
-				}
 			}
+		}
 
-			foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
-				if (bound.Intersects (bomb.GetComponent<Renderer>().bounds)) {
+		foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+			if (bound.Intersects (bomb.GetComponent<Renderer> ().bounds)) {
 				bombScore += 2;
 
-					toBeDestroyed.Add(bomb);
+				toBeDestroyed.Add (bomb);
 					
-					ScoreText.text = "Oh no! You hit the bomb! Banker gets 2 coins! The house is ruined!";
-				}
+				ScoreText.text = "Oh no! You hit the bomb! Banker gets 2 coins! The house is ruined!";
 			}
-
-
 		}
-	void BombHouse(){
-		foreach(GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")){
-			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare1.GetComponent<Renderer>().bounds)){
+
+
+	}
+
+	void BombHouse ()
+	{
+		foreach (GameObject bomb in GameObject.FindGameObjectsWithTag("bombs")) {
+			if (bomb.GetComponent<Renderer> ().bounds.Intersects (cashOutSquare1.GetComponent<Renderer> ().bounds)) {
 				cashOutSquare1.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 				killed.Add (button1);
 				button1.interactable = false;
 
 			}
-			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare2.GetComponent<Renderer>().bounds)){
+			if (bomb.GetComponent<Renderer> ().bounds.Intersects (cashOutSquare2.GetComponent<Renderer> ().bounds)) {
 				cashOutSquare2.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 				killed.Add (button2);
 				button2.interactable = false;
 
 			}
-			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare3.GetComponent<Renderer>().bounds)){
+			if (bomb.GetComponent<Renderer> ().bounds.Intersects (cashOutSquare3.GetComponent<Renderer> ().bounds)) {
 				cashOutSquare3.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 				killed.Add (button3);
 				button3.interactable = false;
 
 			}
-			if (bomb.GetComponent<Renderer>().bounds.Intersects(cashOutSquare4.GetComponent<Renderer>().bounds)){
+			if (bomb.GetComponent<Renderer> ().bounds.Intersects (cashOutSquare4.GetComponent<Renderer> ().bounds)) {
 				cashOutSquare4.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
 				killed.Add (button4);
 				button4.interactable = false;
@@ -338,9 +354,9 @@ public class gameScript : MonoBehaviour {
 
 
 
-			}
 		}
 	}
+}
 	
 
 
