@@ -53,6 +53,7 @@ public class gameScript : MonoBehaviour {
 		button3.onClick.AddListener (PlayerButtonClicked3);
 		button4.onClick.AddListener (PlayerButtonClicked4);
 		note.text = "You are the banker. Store 2 coins or 1 coin and 1 bomb to begin.";
+		OK.interactable = false;
 	}
 
 	void Update() {
@@ -81,6 +82,7 @@ public class gameScript : MonoBehaviour {
 			}
 			if (bankerScore + bombStored - bankerInitialScore == 2) {
 				ScoreText.text = "You can store no more items!";
+				OK.interactable = true;
 			//	foreach(GameObject coin in )
 			}
 		}
@@ -112,6 +114,7 @@ public class gameScript : MonoBehaviour {
 	void ToggleMode() {
 		if (mode == "banker") {
 			mode = "robber";
+			OK.interactable = false;
 
 			destroyedNumber = 0;
 			// This is the text on the top of screen.
@@ -143,6 +146,7 @@ public class gameScript : MonoBehaviour {
 		} else {
 
 			mode = "banker";
+			OK.interactable = false;
 
 			bankerInitialScore = bankerScore;
 
@@ -202,6 +206,7 @@ public class gameScript : MonoBehaviour {
 			button2.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 
 		} else {
@@ -220,6 +225,7 @@ public class gameScript : MonoBehaviour {
 			button1.interactable = false;
 			button3.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 		}else {
 			cashOutSquare2.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
@@ -238,6 +244,7 @@ public class gameScript : MonoBehaviour {
 			button2.interactable = false;
 			button1.interactable = false;
 			button4.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 		}else {
 			cashOutSquare3.GetComponent<SpriteRenderer> ().sortingLayerName = "top";
@@ -254,6 +261,7 @@ public class gameScript : MonoBehaviour {
 			button2.interactable = false;
 			button1.interactable = false;
 			button3.interactable = false;
+			OK.interactable = true;
 			CalculateScore ();
 
 		}else {
