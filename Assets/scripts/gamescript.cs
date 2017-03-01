@@ -50,6 +50,8 @@ public class gameScript : MonoBehaviour
 	public int bombScore = 0;
 	public int bombStored = 0;
 
+
+
 	// Set button functions. I hard coded everything bucause I didn't know how to loop through game objects when I first did that.
 	// Actually if you want to loop though game objects you can do List<GameObject> and then listname. Samething for other object types.
 	void Start ()
@@ -106,6 +108,7 @@ public class gameScript : MonoBehaviour
 			endScreen.gameObject.SetActive (true);
 		}
 		prevNumItems = numItems;
+
 
 	}
 
