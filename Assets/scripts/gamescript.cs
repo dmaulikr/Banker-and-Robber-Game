@@ -52,6 +52,7 @@ public class gameScript : MonoBehaviour {
 		button2.onClick.AddListener (PlayerButtonClicked2);
 		button3.onClick.AddListener (PlayerButtonClicked3);
 		button4.onClick.AddListener (PlayerButtonClicked4);
+		note.text = "You are the banker. Store 2 coins or 1 coin and 1 bomb to begin.";
 	}
 
 	void Update() {
@@ -114,10 +115,10 @@ public class gameScript : MonoBehaviour {
 
 			destroyedNumber = 0;
 			// This is the text on the top of screen.
-			ScoreText.text = "You are the robber. You have robbed " + robberScore + "coins of that banker! Haha!";
+			ScoreText.text = "You are the robber. You have stolen " + robberScore + " coin(s).";
 
 			// This is the text on the right side of screen. called Note
-			note.text = "To Audrey: Whatever note you want to give the robber.";
+			note.text = "Click on a warehouse to steal from.";
 
 			// Activate all the buttons and change the button text
 			button1.GetComponentInChildren<Text> ().text = "Reveal";
@@ -164,7 +165,7 @@ public class gameScript : MonoBehaviour {
 			ScoreText.text = "You are the banker. You now have " + score + " coins!";
 
 			// This is the text on the right side of screen. called Note
-			note.text = "To Audrey: Whatever note you want to give the banker. You can put it here";
+			note.text = "Cash out a warehouse if you so wish. Then store 2 coins or 1 coin and 1 bomb.";
 
 
 
@@ -271,7 +272,7 @@ public class gameScript : MonoBehaviour {
 					robberScore += 1;
 				destroyedNumber += 1;
 					toBeDestroyed.Add(coin);
-				ScoreText.text = "Good shot! You now have " + robberScore + " coins!";
+				ScoreText.text = "Good guess! You now have " + robberScore + " coin(s)!";
 				}
 			}
 
